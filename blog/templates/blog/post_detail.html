@@ -1,32 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
-    <h2>{{object.title}}</h2>
-    <a href="{%url 'blog:post_list'%}">전체 페이지로 돌아가기</a>
-    <p>
-      {%if object.get_previous%}
-      <a
-        href="{{object.get_previous.get_absolute_url}}"
-        title="View previous post"
-      >
-        &laquo;-- {{object.get_previous}}
-      </a>
-      {%endif%} {%if object.get_next%} |
-      <a href="{{object.get_next.get_absolute_url}}" title="View next post">
-        {{object.get_next}} --&raquo;
-      </a>
-      {%endif%}
-    </p>
+{%extends "base.html"%} {%block title%}post_detail.html{%endblock%} <br />
+{%block content%}
+<body>
+  <h2>{{object.title}}</h2>
+</p>
+<h3>게시글 내용</h3>
+<div>{{object.content|linebreaks}}</div>
 
-    <p>{{object.modify_dt|date:"j F Y"}}</p>
-    <br />
-    <h3>게시글 내용</h3>
-    <div>{{object.content|linebreaks}}</div>
-  </body>
-</html>
+<p>{{object.modify_dt|date:"Y F d"}}일</p>
+<br />
+</body>
+<a href="{%url 'blog:post_list'%}">전체 페이지로 돌아가기</a>
+<p>
+  {%if object.get_previous%}
+  <a
+    href="{{object.get_previous.get_absolute_url}}"
+    title="View previous post"
+  >
+    &laquo;-- {{object.get_previous}}
+  </a>
+  {%endif%} {%if object.get_next%} |
+  <a href="{{object.get_next.get_absolute_url}}" title="View next post">
+    {{object.get_next}} --&raquo;
+  </a>
+  {%endif%}
+  
+{% endblock %}
