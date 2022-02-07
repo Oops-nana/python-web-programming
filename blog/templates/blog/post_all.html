@@ -3,6 +3,16 @@
 <br />
 {%block content%}
 <!-- view에서 넘겨 받는 컨텍스트 object_list도 쓸 수 있음  -->
+<div class="">
+  <span>
+    {% if page_obj.has_previous %}
+    <a href="?page={{page.obj.previous_page_number}}">PreviousPage</a>
+    {% endif %} Page {{page_obj.number}} of {{page_obj.paginator.num_pages}}
+    {%if page_obj.has_next %}
+    <a href="?page={{page_obj.next_page_number}}">NextPage</a>
+    {% endif %}
+  </span>
+</div>
 {%for post in posts%}
 <!-- <h3><a href="{{post.get_absoulute_url}}">{{post.title}}</a></h3> -->
 <div>
@@ -11,15 +21,5 @@
   <p>{{post.description}}</p>
   {%endfor%}
   <br />
-  <div class="">
-    <span>
-      {% if page_obj.has_previous %}
-      <a href="?page={{page.obj.previous_page_number}}">PreviousPage</a>
-      {% endif %} Page {{page_obj.number}} of {{page_obj.paginator.num_pages}}
-      {%if page_obj.has_next %}
-      <a href="?page={{page_obj.next_page_number}}">NextPage</a>
-      {% endif %}
-    </span>
-  </div>
 </div>
 {%endblock%}

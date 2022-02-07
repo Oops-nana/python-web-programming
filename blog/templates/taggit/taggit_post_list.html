@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}
+  taggit_post_list.html
+{% endblock %}
+
+{% block content %}
+
+  <h1>Tag :
+    {{tagname}}</h1>
+  <br>
+
+  {% for post in tag_objects %}
+    <h2>
+      <a href="{{post.get_absolute_url}}">{{post.title}}</a>
+    </h2>
+    {{post.modify_dt|date:"N d, Y"}}
+    <p>{{post.description}}</p>
+  {% endfor %}
+{% endblock content %}

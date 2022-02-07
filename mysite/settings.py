@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-p-ks8yxt%mfoke+azbm20-d88wdr7&l+*9aw53%t#)de&k#-6%'
+SECRET_KEY = ''
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -40,6 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'taggit.apps.TaggitAppConfig',
+    'taggit_templatetags2',
+
 ]
 
 MIDDLEWARE = [
@@ -128,6 +131,12 @@ MEDIA_URL = 'media/'
 MEDIA_ROOT = [
     BASE_DIR / 'media'
 ]
+
+TAGGIG_CASE_INTENSIVE = True
+TAG_LIMIT = 50
+
+DISQUS_SHORTNAME = 'py-web-programming'
+DISQUS_MY_DOMAIN = 'http://127.0.0.1:8000/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field

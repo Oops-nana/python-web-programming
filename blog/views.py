@@ -1,9 +1,10 @@
+from multiprocessing import context
 from re import template
 from django.shortcuts import render
 from django.core.paginator import Paginator
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, TemplateView
 from django.views.generic import ArchiveIndexView, YearArchiveView, MonthArchiveView, DayArchiveView, TodayArchiveView
-
+from django.conf import settings
 from .models import Post
 # Create your views here.
 
@@ -22,12 +23,19 @@ class PostLV(ListView):
 
 # ----DetailView
 
-
 class PostDV(DetailView):
     model = Post
 
-# ----ArchiveView
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['disqus_short'] = f"{settings.DISQUS_SHORTNAME}"
+        context['disqus_id'] = f"post-{self.object.id} - {self.object.slug}"
+        context['disqus_url'] = f"{settings.DISQUS_MY_DOMAIN}{self.object.get_absolute_url()}"
+        context['disqus_title'] = f"{self.object.slug}"
+        return context
 
+
+# ----ArchiveView
 
 class PostAV(ArchiveIndexView):
     model = Post
@@ -56,3 +64,25 @@ class PostTAV(TodayArchiveView):
     model = Post
     date_field = 'modify_dt'
     make_object_list = True
+
+
+class TagCloudTV(TemplateView):
+    template_name = 'taggit/taggit_cloud.html'
+
+
+class TaggedObjectLV(ListView):
+    template_name = 'taggit/taggit_post_list.html'
+    model = Post  # == queryset = Post.objects.all()
+    context_object_name = 'tag_objects'
+    # 기본적으로 queryset 속성 의 값을 반환 하지만 더 많은 로직을 추가하는 데 사용할 수 있습니다.
+
+    def get_queryset(self):
+        return Post.objects.filter(tags__name=self.kwargs.get('tag'))
+
+    def get_context_data(self, **kwargs):  # get_context_data 오버라이딩
+        # 상위클래스의 컨텍스트 변수, 즉 변경 전의 컨텍스트 변수를 구한다.
+        context = super().get_context_data(**kwargs)
+        # URLConfig에 있는 파라미터 tag를 가져옴...
+        context['tagname'] = self.kwargs['tag']
+
+        return context
