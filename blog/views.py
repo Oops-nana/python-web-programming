@@ -1,11 +1,14 @@
 from multiprocessing import context
 from re import template
-from django.shortcuts import render
 from django.core.paginator import Paginator
 from django.views.generic import ListView, DetailView, TemplateView
 from django.views.generic import ArchiveIndexView, YearArchiveView, MonthArchiveView, DayArchiveView, TodayArchiveView
 from django.conf import settings
 from .models import Post
+from django.views.generic import FormView  # FormView 클래스형 제네릭 뷰를 임포트
+from blog.foms import PostSearchForm
+from django.db.models import Q  # 검색 기능에 필요한 Q클래스를 임포트
+from django.shortcuts import render
 # Create your views here.
 
 # ----ListView
@@ -86,3 +89,21 @@ class TaggedObjectLV(ListView):
         context['tagname'] = self.kwargs['tag']
 
         return context
+
+
+class SearchFormView(FormView):
+    form_class = PostSearchForm
+    template_name = 'blog/post_search.html'
+
+    def form_valid(self, form):
+        searchWord = form.cleaned_data['search_word']
+        post_list = Post.objects.filter(Q(title__icontains=searchWord) | Q(
+            description__icontains=searchWord) | Q(content__icontains=searchWord)).distinct()
+
+        context = {}
+        context['form'] = form
+        context['search_term'] = searchWord
+        context['object_list'] = post_list
+
+        # No Redirection
+        return render(self.request, self.template_name, context)

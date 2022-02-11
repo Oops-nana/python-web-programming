@@ -72,6 +72,9 @@
                     >Archive</a
                   >
                 </li>
+                <li>
+                  <a class = "dropdown-item" href="{% url 'blog:search' %}">Search</a>
+                </li>
                 {% comment %}
                 <li><hr class="dropdown-divider" /></li>
                 <li>
@@ -103,4 +106,5 @@
 
     {% block content %}{% endblock %} {% block footer %}{% endblock %}
   </body>
+  {% block extra-script %}{% endblock %}
 </html>
